@@ -1,0 +1,8 @@
+[build]
+target = "meta/x86_64/x86_64-adamant.json"
+
+[unstable]
+build-std = ["core", "alloc"]
+
+[target.x86_64-adamant]
+runner = "./meta/x86_64/run_qemu_update.sh"

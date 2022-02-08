@@ -2,7 +2,7 @@ ENTRY(entry_point)
 
 SECTIONS
 {
-    kernel_phys_offset = 0xC000000000000000;
+    kernel_phys_offset = 0xffffffff80200000;
     . = kernel_phys_offset;
     
     .stivale2hdr ALIGN(4K):

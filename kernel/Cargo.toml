@@ -5,4 +5,8 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[build-dependencies]
+nasm-rs = "0.2.4"
+
 [dependencies]
+stivale-boot = "0.2.6"
