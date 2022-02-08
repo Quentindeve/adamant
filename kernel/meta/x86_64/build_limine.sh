@@ -2,11 +2,6 @@
 mkdir build
 
 DISK=build/kernel.img
-# Creates the image file.
-dd if=/dev/zero bs=8M count=0 seek=64 of=$DISK
-parted -s $DISK mklabel msdos
-parted -s $DISK mkpart primary 1 100%
-parted -s $DISK set 1 boot on
 
 # Variables used under
 KERNEL_ELF=target/x86_64-adamant/debug/kernel
@@ -15,15 +10,21 @@ ECHFS_ROOT=thirdparty/echfs
 LIMINE_PATH=thirdparty/limine
 LIMINE_CFG=meta/x86_64/limine.cfg
 
-# Build echfs-utils
-cd $ECHFS_ROOT
-make utils
-cd ../../
+ROOT=./build/temp
+mkdir -p $ROOT
 
-# Use echfs-utils to import everything on image
-$ECHFS_UTILS -m -p0 $DISK quick-format 32768
-$ECHFS_UTILS -m -p0 $DISK import $LIMINE_PATH/limine.sys limine.sys
-$ECHFS_UTILS -m -p0 $DISK import $LIMINE_CFG limine.cfg
-$ECHFS_UTILS -m -p0 $DISK import $KERNEL_ELF kernel.elf
+cp $KERNEL_ELF $LIMINE_CFG $LIMINE_PATH/limine.sys $LIMINE_PATH/limine-cd.bin $LIMINE_PATH/limine-eltorito-efi.bin $ROOT/
+
+xorriso -as mkisofs -b limine-cd.bin \
+    -no-emul-boot -boot-load-size 4 -boot-info-table \
+    --efi-boot limine-eltorito-efi.bin \
+    -efi-boot-part --efi-boot-image --protective-msdos-label \
+    $ROOT/ -o $DISK
+
+rm -rf $ROOT
+
+# Build image
+
+
 
 $LIMINE_PATH/limine-install-linux-x86_64 $DISK
