@@ -1,8 +1,16 @@
-global port_out
-port_out:
-    outb di, si
+[BITS 64]
 
-global port_in
-port_in:
-    in di, ax
+global disable_interrupts
+disable_interrupts:
+    cli
+    ret
+
+global enable_interrupts
+enable_interrupts:
+    sti
+    ret
+
+global load_idt
+load_idt:
+    lidt [rdi]
     ret

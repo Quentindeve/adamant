@@ -1,3 +1,4 @@
+[BITS 64]
 global gdt_update
 
 gdt_update:

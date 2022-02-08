@@ -56,6 +56,11 @@ type Gdt = [GdtSegment; 6];
 /// Long-mode granularity is set only when the segment is an executable one.
 const LONG_MODE_GRANULARITY: u8 = 0b00100000;
 
+pub const KERNEL_CODE: u16 = 1;
+pub const KERNEL_DATA: u16 = 2;
+pub const USER_DATA: u16 = 4;
+pub const USER_CODE: u16 = 5;
+
 /// Since GDT is always the same despite the context we can let the compile-time do its job.
 const GDT: Gdt = [
     GdtSegment::new(0, 0, 0, 0),
@@ -86,6 +91,7 @@ extern "C" {
 /// Loads the GDT.
 pub fn setup_gdt() {
     unsafe {
+        // Be careful, descriptor goes gulag after gdt_update, maybe we shouldn't
         let descriptor = GdtDescriptor::new(&GDT);
         gdt_update(&descriptor);
     }
