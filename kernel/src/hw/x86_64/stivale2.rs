@@ -1,5 +1,3 @@
-use core::hint::black_box;
-
 use stivale_boot::v2::{StivaleFramebufferHeaderTag, StivaleHeader};
 
 const STACK_LENGTH: usize = 16 * 1024; // 16 KiB of stack.
@@ -13,4 +11,5 @@ const STIVALE_FRAMEBUFFER: StivaleFramebufferHeaderTag =
 #[link_section = ".stivale2hdr"]
 static STIVALE_HEADER: StivaleHeader = StivaleHeader::new()
     .stack(&STACK[STACK_LENGTH - 1] as *const u8)
+    .entry_point(super::entry_point)
     .tags((&STIVALE_FRAMEBUFFER as *const StivaleFramebufferHeaderTag).cast());
