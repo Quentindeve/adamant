@@ -6,8 +6,8 @@ pub mod port;
 pub mod stivale2;
 
 /// The x86_64 arch entry point.
-extern "C" fn entry_point() -> ! {
-    /* gdt::setup_gdt(); */
+extern "C" fn entry_point(_stivale_struct: &stivale_boot::v2::StivaleStruct) -> ! {
+    gdt::setup_gdt();
     /* idt::setup_idt();
     com::init_serial(&com::ComPort::COM2);
     let msg = b"Hello World !";
