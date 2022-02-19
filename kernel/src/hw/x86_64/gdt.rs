@@ -84,6 +84,7 @@ const GDT: Gdt = [
     ),
 ];
 
+#[link(name = "adamant-x86_64")]
 extern "C" {
     fn gdt_update(descriptor: &GdtDescriptor);
 }

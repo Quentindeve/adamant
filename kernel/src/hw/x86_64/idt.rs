@@ -96,6 +96,7 @@ type Idt = [IdtEntry; IDT_LENGTH];
 
 static mut IDT: Idt = [IdtEntry::empty(); IDT_LENGTH];
 
+#[link(name = "adamant-x86_64")]
 extern "C" {
     fn disable_interrupts();
     fn enable_interrupts();

@@ -27,5 +27,5 @@ pub fn getchar(port: u16) -> char {
 
 const COM_LINE_DATA_READY: u8 = 1 << 0;
 fn port_read_ready(port: u16) -> bool {
-    unsafe { return (inb(port + ComRegister::LineStatus as u16) & COM_LINE_DATA_READY) > 0 }
+    inb(port + ComRegister::LineStatus as u16) & COM_LINE_DATA_READY > 0
 }

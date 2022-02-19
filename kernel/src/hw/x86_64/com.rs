@@ -51,6 +51,12 @@ pub fn init_serial(com: &ComPort) -> ComStatus {
     }
 }
 
+pub fn write_text(com: ComPort, text: &str) {
+    for c in text.chars() {
+        putchar(&com, c);
+    }
+}
+
 /// Puts a char to the specified COM port.
 pub fn putchar(com: &ComPort, c: char) {
     outb(*com as u16, c as u8);

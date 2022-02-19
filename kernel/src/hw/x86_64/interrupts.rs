@@ -1,5 +1,7 @@
 use core::intrinsics::black_box;
 
+use super::com::ComPort;
+
 #[repr(C, packed)]
 struct Registers {
     ds: u64,
@@ -69,6 +71,7 @@ static EXCEPTION_HANDLERS: [HandlerFunc; 32] = black_box([
     reserved_21_31,
 ]);
 
+#[no_mangle]
 extern "C" fn interrupt_handler(rsp: &Registers) {
     let int_no = rsp.int_no;
     if int_no <= 31 {
@@ -76,7 +79,9 @@ extern "C" fn interrupt_handler(rsp: &Registers) {
     }
 }
 
-fn exception_div_by_zero(rsp: &Registers) {}
+fn exception_div_by_zero(rsp: &Registers) {
+    super::com::write_text(ComPort::COM1, "Exception 0 triggered !");
+}
 
 fn exception_debug(rsp: &Registers) {}
 

@@ -1,6 +1,8 @@
-[BITS 64]
-global gdt_update
+;[BITS 64]
 
+section .text
+
+global gdt_update
 gdt_update:
   lgdt [rdi]
   mov ax, 0x10
