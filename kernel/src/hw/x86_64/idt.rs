@@ -87,6 +87,8 @@ impl IdtAttributes {
 }
 
 pub const IDT_LENGTH: usize = 256;
+
+#[link(name = "adamant-x86_64")]
 extern "C" {
     static __interrupt_vector: [u64; 256];
     fn load_idt(idt_descriptor: &IdtDescriptor);
