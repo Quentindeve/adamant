@@ -17,7 +17,10 @@
             "-Wl,-Tmeta/x86_64/link.ld",
             "-Wl,--nmagic",
             "-nostartfiles",
-            "-Wl,--no-dynamic-linker"
+            "-Wl,--no-dynamic-linker",
+            "-fno-pic",
+            "-fno-pie",
+            "-mcmodel=kernel"
         ]
     }
 }
