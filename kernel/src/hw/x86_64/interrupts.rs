@@ -1,4 +1,4 @@
-use core::intrinsics::black_box;
+use core::{arch::asm, intrinsics::black_box};
 
 use super::com::ComPort;
 
@@ -70,6 +70,18 @@ static EXCEPTION_HANDLERS: [HandlerFunc; 32] = black_box([
     reserved_21_31,
     reserved_21_31,
 ]);
+
+pub fn disable_interrupts() {
+    unsafe {
+        asm!("cli");
+    }
+}
+
+pub fn enable_interrupts() {
+    unsafe {
+        asm!("sti");
+    }
+}
 
 #[no_mangle]
 extern "C" fn interrupt_handler(rsp: &Registers) {
