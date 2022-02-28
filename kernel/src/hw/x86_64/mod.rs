@@ -13,13 +13,13 @@ pub mod stivale2;
 extern "C" fn entry_point(_stivale_struct: &stivale_boot::v2::StivaleStruct) -> ! {
     com::init_serial(&com::ComPort::COM1);
 
-    com::write_text(ComPort::COM1, "Pre GDT");
+    com::write_text(ComPort::COM1, "Pre GDT\n");
     gdt::setup_gdt();
-    com::write_text(ComPort::COM1, "Post GDT");
+    com::write_text(ComPort::COM1, "Post GDT\n");
 
-    com::write_text(ComPort::COM1, "Pre IDT");
+    com::write_text(ComPort::COM1, "Pre IDT\n");
     idt::setup_idt();
-    com::write_text(ComPort::COM1, "Post IDT");
+    com::write_text(ComPort::COM1, "Post IDT\n");
 
     unsafe {
         asm!("int 0");
