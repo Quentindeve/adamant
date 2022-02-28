@@ -33,7 +33,7 @@ struct Registers {
 }
 
 // TODO: Maybe got optimized don't rage kiddo :^)
-type HandlerFunc = fn(rsp: &Registers);
+type HandlerFunc = fn(_rsp: &Registers);
 
 #[used]
 static EXCEPTION_HANDLERS: [HandlerFunc; 32] = black_box([
@@ -91,48 +91,48 @@ extern "C" fn interrupt_handler(rsp: &Registers) {
     }
 }
 
-fn exception_div_by_zero(rsp: &Registers) {
+fn exception_div_by_zero(_rsp: &Registers) {
     super::com::write_text(ComPort::COM1, "Exception 0 triggered !");
 }
 
-fn exception_debug(rsp: &Registers) {}
+fn exception_debug(_rsp: &Registers) {}
 
-fn exception_nmi(rsp: &Registers) {}
+fn exception_nmi(_rsp: &Registers) {}
 
-fn exception_breakpoint(rsp: &Registers) {}
+fn exception_breakpoint(_rsp: &Registers) {}
 
-fn exception_overflow(rsp: &Registers) {}
+fn exception_overflow(_rsp: &Registers) {}
 
-fn exception_bound(rsp: &Registers) {}
+fn exception_bound(_rsp: &Registers) {}
 
-fn exception_invalid_opcode(rsp: &Registers) {}
+fn exception_invalid_opcode(_rsp: &Registers) {}
 
-fn exception_device_not_available(rsp: &Registers) {}
+fn exception_device_not_available(_rsp: &Registers) {}
 
-fn double_fault(rsp: &Registers) {}
+fn double_fault(_rsp: &Registers) {}
 
-fn exception_coprocessor(rsp: &Registers) {}
+fn exception_coprocessor(_rsp: &Registers) {}
 
-fn exception_invalid_tss(rsp: &Registers) {}
+fn exception_invalid_tss(_rsp: &Registers) {}
 
-fn exception_missing_segment(rsp: &Registers) {}
+fn exception_missing_segment(_rsp: &Registers) {}
 
-fn exception_invalid_stack(rsp: &Registers) {}
+fn exception_invalid_stack(_rsp: &Registers) {}
 
-fn exception_gpf(rsp: &Registers) {}
+fn exception_gpf(_rsp: &Registers) {}
 
-fn page_fault(rsp: &Registers) {}
+fn page_fault(_rsp: &Registers) {}
 
-fn reserved15(rsp: &Registers) {}
+fn reserved15(_rsp: &Registers) {}
 
-fn exception_fpu(rsp: &Registers) {}
+fn exception_fpu(_rsp: &Registers) {}
 
-fn align_fault(rsp: &Registers) {}
+fn align_fault(_rsp: &Registers) {}
 
-fn exception_machine_verif_fault(rsp: &Registers) {}
+fn exception_machine_verif_fault(_rsp: &Registers) {}
 
-fn exception_simd(rsp: &Registers) {}
+fn exception_simd(_rsp: &Registers) {}
 
-fn exception_virt(rsp: &Registers) {}
+fn exception_virt(_rsp: &Registers) {}
 
-fn reserved_21_31(rsp: &Registers) {}
+fn reserved_21_31(_rsp: &Registers) {}
