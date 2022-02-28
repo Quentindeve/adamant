@@ -62,14 +62,6 @@ enum InterruptType {
     Gate = 0x8E,
 }
 
-#[repr(u8)]
-enum DPL {
-    Ring0 = 0b00000000,
-    Ring1 = 0b00100000,
-    Ring2 = 0b01000000,
-    Ring3 = 0b01100000,
-}
-
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 struct IdtAttributes(u8);
