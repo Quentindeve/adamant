@@ -16,6 +16,7 @@
         "gcc": [
             "-Wl,-Tmeta/x86_64/link.ld",
             "-Wl,--nmagic",
+            "-m64",
             "-nostartfiles",
             "-Wl,--no-dynamic-linker",
             "-fno-pic",
