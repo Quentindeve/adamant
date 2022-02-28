@@ -23,7 +23,7 @@ struct IdtEntry {
     offset_low: u16,
     code_segment: u16,
     ist: u8,
-    attr: IdtAttributes,
+    attr: u8,
     offset_mid: u16,
     offset_high: u32,
     _zero: u32,
@@ -35,17 +35,17 @@ impl IdtEntry {
             offset_low: 0,
             code_segment: 0,
             ist: 0,
-            attr: IdtAttributes::zero(),
+            attr: 0,
             offset_mid: 0,
             offset_high: 0,
             _zero: 0,
         }
     }
 
-    const fn new(handler: u64, code_index: u16, attr: IdtAttributes) -> Self {
+    const fn new(handler: u64, code_index: u16, attr: u8) -> Self {
         Self {
             offset_low: handler as u16,
-            code_segment: code_index * 8,
+            code_segment: code_index,
             ist: 0,
             attr,
             offset_mid: (handler >> 16) as u16,
@@ -57,10 +57,9 @@ impl IdtEntry {
 
 #[repr(u8)]
 enum InterruptType {
-    Trap16 = 0b00000111,
-    Gate16 = 0b00000110,
-    Gate32 = 0b00001110,
-    Trap32 = 0b00001111,
+    Trap = 0xEF,
+    User = 0x60,
+    Gate = 0x8E,
 }
 
 #[repr(u8)]
@@ -74,17 +73,6 @@ enum DPL {
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 struct IdtAttributes(u8);
-
-const BIT_PRESENT: u8 = 0b10000000;
-
-impl IdtAttributes {
-    const fn new(int_type: InterruptType, dpl: DPL) -> Self {
-        Self((int_type as u8) | (dpl as u8) | BIT_PRESENT)
-    }
-    const fn zero() -> Self {
-        Self(0)
-    }
-}
 
 #[link(name = "adamant-x86_64")]
 extern "C" {
@@ -109,7 +97,7 @@ fn init_idt() {
             IDT[i] = IdtEntry::new(
                 __interrupt_vector[i],
                 KERNEL_CODE * 8,
-                IdtAttributes::new(InterruptType::Gate32, DPL::Ring0)
+                InterruptType::Gate as u8,
             );
         }
     }
@@ -118,10 +106,11 @@ fn init_idt() {
 pub fn setup_idt() {
     unsafe {
         disable_interrupts();
-
         init_idt();
+
         // Be careful, descriptor goes gulag after load_idt, maybe we shouldn't
         let descriptor = IdtDescriptor::new(&IDT);
+
         load_idt(&descriptor);
         enable_interrupts();
     }
