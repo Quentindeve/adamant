@@ -22,6 +22,7 @@ impl GdtDescriptor {
 }
 
 /// Representation of a GDT segment.
+#[repr(C, packed)]
 struct GdtSegment {
     limit_low: u16,
     base_low: u16,
@@ -38,7 +39,7 @@ impl GdtSegment {
             base_low: 0,
             base_mid: 0,
             flags,
-            limit_high_and_granularity: granularity,
+            limit_high_and_granularity: 0 | granularity,
             base_high: 0,
         }
     }
@@ -54,7 +55,7 @@ const GDT_RW: u8 = 0b00000010;
 type Gdt = [GdtSegment; 6];
 
 /// Long-mode granularity is set only when the segment is an executable one.
-const LONG_MODE_GRANULARITY: u8 = 0b00000010;
+const LONG_MODE_GRANULARITY: u8 = 0b00100000;
 // 0b0010
 
 pub const KERNEL_CODE: u16 = 1;
