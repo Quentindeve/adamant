@@ -86,14 +86,13 @@ impl IdtAttributes {
     }
 }
 
-pub const IDT_LENGTH: usize = 256;
-
 #[link(name = "adamant-x86_64")]
 extern "C" {
     static __interrupt_vector: [u64; 256];
     fn load_idt(idt_descriptor: &IdtDescriptor);
 }
 
+pub const IDT_LENGTH: usize = 256;
 type Idt = [IdtEntry; IDT_LENGTH];
 
 static mut IDT: Idt = [IdtEntry::empty(); IDT_LENGTH];
@@ -110,7 +109,7 @@ fn init_idt() {
             IDT[i] = IdtEntry::new(
                 __interrupt_vector[i],
                 KERNEL_CODE * 8,
-                IdtAttributes::new(InterruptType::Gate32, DPL::Ring0),
+                IdtAttributes::new(InterruptType::Gate32, DPL::Ring0)
             );
         }
     }
@@ -124,7 +123,6 @@ pub fn setup_idt() {
         // Be careful, descriptor goes gulag after load_idt, maybe we shouldn't
         let descriptor = IdtDescriptor::new(&IDT);
         load_idt(&descriptor);
-
         enable_interrupts();
     }
 }
