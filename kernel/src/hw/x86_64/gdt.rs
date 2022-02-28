@@ -56,7 +56,6 @@ type Gdt = [GdtSegment; 6];
 
 /// Long-mode granularity is set only when the segment is an executable one.
 const LONG_MODE_GRANULARITY: u8 = 0b00100000;
-// 0b0010
 
 pub const KERNEL_CODE: u16 = 1;
 pub const KERNEL_DATA: u16 = 2;
