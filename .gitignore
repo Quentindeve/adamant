@@ -1,3 +1,4 @@
 kernel/target/
 kernel/Cargo.lock
 kernel/build
+libraries/target/
