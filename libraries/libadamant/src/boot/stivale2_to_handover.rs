@@ -27,8 +27,6 @@ pub fn _stivale2_to_handover(stivale_struct: &StivaleStruct, handover: &mut Hand
 }
 
 fn stivale2_mmap_to_handover(stivale2_mmap: &'static StivaleMemoryMapTag, handover: &mut Handover) {
-    let size = stivale2_mmap.entries_len;
-
     let mut entries = [HandoverMmapEntry::null(); HANDOVER_MMAP_MAX_SIZE];
     let mut size = 0usize;
 
@@ -124,14 +122,10 @@ fn stivale2_modules_to_handover(stivale2_struct: &StivaleStruct, handover: &mut 
                 let mut stivale2_mod_name = [0; 32];
                 stivale2_mod_name.clone_from_slice(stivale2_mod_name_shrink);
 
-                let handover_module_name = unsafe {
-                    core::mem::transmute::<[u8; 32], [libc::c_char; 32]>(stivale2_mod_name)
-                };
-
                 handover.modules.modules[module_index] = HandoverModule {
                     address: module.start as usize,
                     size: (module.end - module.start) as usize,
-                    module_name: handover_module_name,
+                    module_name: stivale2_mod_name,
                 }
             }
             handover.modules.size = mod_count;
