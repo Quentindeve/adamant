@@ -5,7 +5,7 @@ pub const HANDOVER_TAG: u64 = 0x68616e646f766572;
 
 /// Handover memory map entry types.
 #[repr(u32)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum HandoverMmapType {
     /// This entry is free, can be used.
     MmapFree = 0,
@@ -45,6 +45,7 @@ pub const HANDOVER_MMAP_MAX_SIZE: usize = 64;
 
 /// Handover's memory map.
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct HandoverMmap {
     /// The size of the memory map. Even if the entries field is always initialized at maximum, isn't mandatory to fill all.
     pub size: usize,
@@ -58,6 +59,39 @@ impl HandoverMmap {
         Self {
             size: 0,
             entries: [HandoverMmapEntry::null(); HANDOVER_MMAP_MAX_SIZE],
+        }
+    }
+}
+
+/// Structure representing an iterator on a `HandoverMmap`
+pub struct HandoverMmapIterator {
+    count: usize,
+    mmap: HandoverMmap,
+}
+
+impl IntoIterator for HandoverMmap {
+    type Item = HandoverMmapEntry;
+
+    type IntoIter = HandoverMmapIterator;
+
+    fn into_iter(self) -> Self::IntoIter {
+        HandoverMmapIterator {
+            count: 0,
+            mmap: self.clone(),
+        }
+    }
+}
+
+impl Iterator for HandoverMmapIterator {
+    type Item = HandoverMmapEntry;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.count < self.mmap.size {
+            self.count += 1;
+            Some(self.mmap.entries[self.count - 1])
+        }
+        else {
+            None
         }
     }
 }
