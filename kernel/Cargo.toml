@@ -10,3 +10,4 @@ nasm-rs = "0.2.4"
 
 [dependencies]
 stivale-boot = "0.2.6"
+libadamant = {path = "../libraries/libadamant"}
