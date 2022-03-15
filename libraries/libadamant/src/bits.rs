@@ -8,10 +8,10 @@ pub struct Bits {
 
 impl Bits {
     /// Creates a new bitmap.
-    /// Be careful: this function will panic if base is null and len is less than 1.
+    /// Be careful: this function will panic if base is null or len is 0.
     pub fn new(base: *mut u8, len: usize) -> Self {
         assert_ne!(base, core::ptr::null_mut());
-        assert!(len >= 1);
+        assert!(len > 0);
 
         Self { base, len }
     }
