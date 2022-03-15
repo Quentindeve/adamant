@@ -1,6 +1,7 @@
 use core::arch::asm;
 
 use self::com::ComPort;
+use libadamant::{log, print, println, boot::handover::Handover};
 
 pub mod com;
 pub mod gdt;
@@ -9,20 +10,31 @@ pub mod interrupts;
 pub mod port;
 pub mod stivale2;
 
+const COM_PORT: ComPort = ComPort::COM1;
+
 /// The x86_64 arch entry point.
-extern "C" fn entry_point(_stivale_struct: &stivale_boot::v2::StivaleStruct) -> ! {
-    com::init_serial(&com::ComPort::COM1);
+extern "C" fn entry_point(stivale_struct: &stivale_boot::v2::StivaleStruct) -> ! {
+    com::init_serial(&COM_PORT);
+    log::set_global_logger(log::Logger::new_all(com::log));
 
-    com::write_text(ComPort::COM1, "Pre GDT\n");
+    println!("Pre-GDT");
     gdt::setup_gdt();
-    com::write_text(ComPort::COM1, "Post GDT\n");
+    println!("Post-GDT");
 
-    com::write_text(ComPort::COM1, "Pre IDT\n");
+    println!("Pre-IDT");
     idt::setup_idt();
-    com::write_text(ComPort::COM1, "Post IDT\n");
+    println!("Post-IDT");
 
     unsafe {
         asm!("int 0");
     }
+
+    let mut handover = Handover::null();
+    libadamant::boot::stivale2_to_handover(&stivale_struct, &mut handover);
+
+    for entry in handover.mmap {
+        println!("New entry ! Base = {}, End = {}, Type: {:?}", entry.begin, entry.end, entry.mmap_type);
+    }
+
     loop {}
 }
