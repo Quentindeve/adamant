@@ -1,10 +1,12 @@
 use core::{arch::asm, intrinsics::black_box};
 
+use libadamant::{print,println};
+
 use super::com::ComPort;
 
 #[repr(C, packed)]
+#[derive(Debug)]
 struct Registers {
-    ds: u64,
     r15: u64,
     r14: u64,
     r13: u64,
@@ -84,15 +86,21 @@ pub fn enable_interrupts() {
 }
 
 #[no_mangle]
-extern "C" fn interrupt_handler(rsp: &Registers) {
+extern "C" fn interrupt_handler(rsp: &Registers) -> &Registers {
     let int_no = rsp.int_no;
+    let rip = rsp.rip;
+    let code = rsp.error_code;
+    println!("Rip = {:x}, int_no = {}, error_code = {:b}", rip, int_no, code);
+
     if int_no <= 31 {
         EXCEPTION_HANDLERS[int_no as usize](rsp);
     }
+
+    return rsp;
 }
 
 fn exception_div_by_zero(_rsp: &Registers) {
-    super::com::write_text(ComPort::COM1, "Exception 0 triggered !");
+    println!("Test ???");
 }
 
 fn exception_debug(_rsp: &Registers) {}

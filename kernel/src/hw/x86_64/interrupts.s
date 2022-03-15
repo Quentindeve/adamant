@@ -16,14 +16,9 @@
     push r13
     push r14
     push r15
-    xor rax, rax
-    mov rax, ds
-    push rax
 %endmacro
 
 %macro pop_all 0
-    pop rax
-    mov ds, ax
     pop r15
     pop r14
     pop r13
