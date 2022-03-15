@@ -57,6 +57,10 @@ pub fn write_text(com: ComPort, text: &str) {
     }
 }
 
+pub fn log(text: &str) {
+    write_text(super::COM_PORT, text);
+} 
+
 /// Puts a char to the specified COM port.
 pub fn putchar(com: &ComPort, c: char) {
     outb(*com as u16, c as u8);
