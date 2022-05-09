@@ -38,6 +38,10 @@ impl HandoverMmapEntry {
             mmap_type: HandoverMmapType::MmapUsed,
         }
     }
+
+    pub const fn length(&self) -> usize {
+        self.end - self.begin - 1 // [begin; end[
+    }
 }
 
 /// The max size of the Handover's memory map.
