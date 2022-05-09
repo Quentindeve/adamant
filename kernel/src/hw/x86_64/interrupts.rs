@@ -2,10 +2,8 @@ use core::{arch::asm, intrinsics::black_box};
 
 use libadamant::{print,println};
 
-use super::com::ComPort;
-
 #[repr(C, packed)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 struct Registers {
     r15: u64,
     r14: u64,
