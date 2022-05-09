@@ -8,11 +8,11 @@ pub fn outb(port: u16, value: u8) {
 }
 
 pub fn inb(source: u16) -> u8 {
-    let mut byte_out = 0;
+    let mut _byte_out = 0;
     unsafe {
-        asm!("in al, dx", out("al") byte_out, in("dx") source, options(nomem, nostack, preserves_flags));
+        asm!("in al, dx", out("al") _byte_out, in("dx") source, options(nomem, nostack, preserves_flags));
     }
-    byte_out
+    _byte_out
 }
 
 pub fn putchar(port: u16, c: char) {
