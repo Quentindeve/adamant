@@ -6,3 +6,4 @@ extern crate libadamant;
 
 pub mod hw;
 pub mod panic;
+pub mod pmm;
