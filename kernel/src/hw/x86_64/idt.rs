@@ -55,6 +55,7 @@ impl IdtEntry {
     }
 }
 
+#[allow(dead_code)]
 #[repr(u8)]
 enum InterruptType {
     Trap = 0xEF,
