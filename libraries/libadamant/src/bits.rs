@@ -24,6 +24,12 @@ impl Bits {
         ((self.base as usize) + index) as *mut u8
     }
 
+    pub fn get_state(&self, index: usize) -> bool {
+        let byte_index = byte_index(index);
+        let bit_index = bit_index(index);
+        unsafe { (*(self.get(byte_index)) >> bit_index) % 2 == 1 }
+    }
+
     pub fn set(&mut self, index: usize, state: bool) {
         let byte_index = byte_index(index);
         let bit_index = bit_index(index);
@@ -35,6 +41,25 @@ impl Bits {
         } else {
             unsafe {
                 *(self.get(byte_index)) &= !(1 << (bit_index));
+            }
+        }
+    }
+
+    /// Sets [start_index; end_index[ bits to ``state``
+    pub fn set_range(&mut self, start_index: usize, end_index: usize, state: bool) {
+        assert!(end_index <= self.len);
+
+        for i in start_index..=end_index {
+            self.set(i, state);
+        }
+    }
+
+    pub fn fill(&mut self, state: bool) {
+        unsafe {
+            if state {
+                core::ptr::write_bytes(self.base, 0xff, self.len);
+            } else {
+                core::ptr::write_bytes(self.base, 0, self.len);
             }
         }
     }
