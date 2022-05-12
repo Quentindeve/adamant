@@ -1,2 +1,2 @@
 [workspace]
-members = ["libadamant"]
+members = ["libadamant", "libadamant/src/tests"]
