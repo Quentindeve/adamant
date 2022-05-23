@@ -24,13 +24,9 @@ fn bitmap_set_range_works() {
 
     bitmap.set_range(0, 30, true);
 
-    for i in 0..3 {
-        let byte = unsafe { *bitmap.get(i) };
-        assert_eq!(byte, 0xff);
+    for i in 0..30 {
+        assert!(bitmap.get_state(i));
     }
-
-    let problematic_byte = unsafe { *bitmap.get(3) };
-    assert_eq!(problematic_byte, 0x7F);
 }
 
 #[test]
