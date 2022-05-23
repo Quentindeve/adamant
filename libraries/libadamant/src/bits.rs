@@ -49,7 +49,7 @@ impl Bits {
     pub fn set_range(&mut self, start_index: usize, end_index: usize, state: bool) {
         assert!(end_index <= self.len);
 
-        for i in start_index..=end_index {
+        for i in start_index..end_index {
             self.set(i, state);
         }
     }
